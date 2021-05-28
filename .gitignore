@@ -1,0 +1,4 @@
+*.pdf
+analyzed_data/
+raw_ride_data/
+ride_data/
