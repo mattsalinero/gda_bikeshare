@@ -25,28 +25,29 @@ For this project, the primary data source is [this](https://divvy-tripdata.s3.am
 
 - For the purpose of this analysis, the data will be treated as first-party/internal data and is assumed to be reliable and original.
 - This analysis will focus on the most recent 12 months of data (as of 2021-05-12), which includes data from 2020-05-01 to 2021-04-30.
-- The data is currently divided into 12 separate monthly files that will eventually be merged to perform overall analysis.
-- On initial inspection, the dataset appears to contain data for all rides taken with the system, with no obvious missing data. 
+- The data is currently divided into 12 separate files, each containing data for a single month. These files will eventually be merged to perform overall analysis for the entire year.
+- On initial inspection, the dataset appears to contain data for all rides taken with the system, with no obvious missing data or omissions. 
+  - Each row of the dataset includes information for one ride, including start and stop locations and times.
 - Some days have no rides listed for them - but this may have been for days when the bikeshare was not operational.
 - As data on every ride during the time period is included the data shouldn't be overly biased towards any one type of rider. 
 - The data doesn't include any PII (Personally Identifiable Information) for riders, so access does not raise privacy concerns. (also this is using an open dataset, so the data here is technically already public)
 	- this is also a limitation - no way to link multiple rides to the same user
 - Round trip rides (rides starting and ending at the same station) are listed with the same start and end station
 	- some rides don't have start or end stations, indicating an out of dock start or end to ride?
-- Includes data for "docked bikes," "electric bikes" (first appearing Jul. 2020), and "classic bikes" (first appearing Dec. 2020)
+- Includes data for different categories of bikes, including "docked bikes," "electric bikes" (first appearing Jul. 2020), and "classic bikes" (first appearing Dec. 2020).
 
 ---
 ## Data Cleaning
 
-Preliminary data cleaning and transformation was performed in the per-month .csv files in preparation for analysis using SQL.
+Preliminary data cleaning and transformation was performed in the per-month .csv files in preparation for analysis using SQL. This stage was mainly performed using Excel as data cleaning was performed individually for each monthly file (keeping row counts down enough for Excel to be performant).
 
 ### Data Cleaning Steps:
 1. Convert monthly data .csv files to .xlsx
 2. Confirm basic column formatting and data types
 	- started_at and ended_at should be treated as time values
 	- id columns should be treated as text (as eventually they include alphanumeric values)
-3. Create addition columns for future analysis
-	- ride_length (using started_at and ended_at)
+3. Create additional columns for future analysis
+	- ride_length (using started_at and ended_at to determine overall time of ride)
 	- day_of_week (based on started_at)
 4. Check for and remove rows with out of bounds ride length 
 	- remove any row with a negative ride length (i.e. where ride_end is before ride_start)
@@ -95,4 +96,5 @@ The findings (and corresponding visualizations) for this project are presented i
 	- potential members can be identified by looking for indications that the bikeshare is being used as a means of transportation
 	- indications include short, frequent rides, use during the morning and weekdays, and travel between city stations outside tourist areas
 - One limitation of this analysis was the inability to analyze multiple rides from the same user
-	- these conclusions could be furher reinforced using this type of data
+	- the conclusions from this analysis could be reinforced using ride data that linked to the riding user
+- Additionally, outside location data, such as data on tourist attractions and public transit stops could be used to develop a better understanding of how and why members and casual riders choose to ride
